@@ -1,6 +1,8 @@
-package com.foldright.checkout
+package com.foldright
 
 import org.scalatest.{ FlatSpec, Matchers }
+import cats.syntax.show._
+import Checked._
 
 class CheckoutSystemSuite extends FlatSpec with Matchers {
 
@@ -18,9 +20,6 @@ class CheckoutSystemSuite extends FlatSpec with Matchers {
     val res = CheckoutSystem.checkout(List(Apple))
     res should be(BigDecimal(60L))
   }
-
-  import convertors._
-  import cats.syntax.show._
 
   it should "checkout 1 and 2 apples for the price of 1 apple" in {
     val apple1 = List(Apple)
@@ -62,5 +61,10 @@ class CheckoutSystemSuite extends FlatSpec with Matchers {
     val fruits = List(Orange, Orange, Orange, Orange, Orange, Orange) ++ List(Apple, Apple, Apple, Apple)
     val fruitsRes = CheckoutSystem.checkout(fruits).show
     fruitsRes should be("£2.2")
+  }
+
+
+  it should "checkout 5 apples and 4 oranges for the price of 3 apples and 3 oranges" in {
+    CheckoutSystem.checkout(List.fill(5)(Apple) ++ List.fill(4)(Orange)).show shouldBe "£2.55"
   }
 }
