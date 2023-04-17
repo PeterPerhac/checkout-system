@@ -1,11 +1,13 @@
 package uk.co.devproltd.checkout
 
+import java.text.NumberFormat
+import java.util.Locale
+
 case class Item(name: String, price: Long)
 
-object CheckoutSystem extends CheckoutSystem with App {}
+object CheckoutSystem {
 
-trait CheckoutSystem {
-
+  private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.UK)
   private val priceList: Map[String, Long] = Map(
     "apple" -> 60L,
     "orange" -> 25L
@@ -22,5 +24,8 @@ trait CheckoutSystem {
   def calculateTotal(basketContents: List[Item]): Long = {
     basketContents.foldLeft(0L)((subtotal, item) => subtotal + item.price)
   }
+
+  def formatPrice(priceInPence: Long): String =
+    currencyFormatter.format(priceInPence.toDouble / 100)
 
 }

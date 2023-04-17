@@ -43,10 +43,25 @@ class CheckoutSystemSpec extends BaseUnitSpec {
         CheckoutSystem.calculateTotal(basketContents) shouldBe 205L
       }
 
-      "the basket contains apples and carrots" in new Basket("apple", "APPLE", "carrot") {
-        CheckoutSystem.calculateTotal(basketContents) shouldBe 120L //carrots are ignored
+      "the basket contains apples and carrots" in new Basket(
+        "apple",
+        "APPLE",
+        "carrot"
+      ) {
+        //carrots are ignored
+        CheckoutSystem.calculateTotal(basketContents) shouldBe 120L
       }
     }
+  }
 
+  "calculated prices" should {
+    "be formatted correctly with the pound symbol and pence after a decimal point" in {
+      val inputPrices = List(0L, 10L, 100L, 205L, 123456789L)
+      val expectedFormattedPrices =
+        List("£0.00", "£0.10", "£1.00", "£2.05", "£1,234,567.89")
+
+      val formattedPrices = inputPrices.map(CheckoutSystem.formatPrice)
+      formattedPrices should contain theSameElementsInOrderAs expectedFormattedPrices
+    }
   }
 }
